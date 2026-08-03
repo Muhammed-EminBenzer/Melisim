@@ -1,465 +1,261 @@
 /* =========================================================
-   script.js — Tüm interaktif özellikler
-   28 Ağustos 2025 — Birlikte geçen zamanı sayıyoruz
+   script.js — Melis'e Özel Site
+   28 Ağustos 2025'ten bu yana...
 ========================================================= */
 
-// ===================================================
-// 1. ŞARKILAR LİSTESİ
-// ===================================================
-// Şarkılarını songs/ klasörüne koy ve buraya ekle:
+// ===== ŞARKILAR =====
 const songs = [
-  // { title: "Şarkı Adı", artist: "Senin için 🎸", src: "songs/sarki1.mp3", duration: "3:24" },
-  // { title: "Şarkı 2", artist: "Senin için 🎸", src: "songs/sarki2.mp3", duration: "2:58" },
-
-  // Şimdilik örnek veriler (mp3 yokken göstermek için):
-  { title: "Şarkı 1", artist: "Senin için 🎸", src: "songs/sarki1.mp3", duration: "--:--" },
-  { title: "Şarkı 2", artist: "Senin için 🎸", src: "songs/sarki2.mp3", duration: "--:--" },
-  { title: "Şarkı 3", artist: "Senin için 🎸", src: "songs/sarki3.mp3", duration: "--:--" },
+  { title: "Şarkı 1", sub: "Senin için 🎸", src: "songs/sarki1.mp3", dur: "--:--" },
+  { title: "Şarkı 2", sub: "Senin için 🎸", src: "songs/sarki2.mp3", dur: "--:--" },
 ];
 
-// ===================================================
-// 2. GALERİ RESİMLERİ — Açıklamalar
-// ===================================================
-const photosCaptions = [
-  "İlk anımız ✨",
-  "Seninle 🌹",
-  "Güzel günler 🌸",
-  "Her yerde sen 💫",
-  "En sevdiğim an 🎶",
-  "Birlikte 🌙",
-];
+// ===== FOTOĞRAFLAR (24 adet, karışık) =====
+const photos = [];
+// foto1.jpeg ~ foto24.jpeg — karışık sıraya koy
+const photoOrder = [7,13,3,19,1,22,10,5,16,2,14,8,20,4,17,11,23,6,15,9,21,12,18,24];
+photoOrder.forEach((n, i) => {
+  photos.push({ src: `photos/foto${n}.jpeg`, cap: "" });
+});
 
 // ===================================================
-// 3. SAYAÇ — 28 Ağustos 2025
+// KONFET İ
 // ===================================================
-const START_DATE = new Date("2025-08-28T00:00:00");
+const COLORS = ["#ff6b9d","#ffd166","#c77dff","#ff9a5c","#06d6a0","#ff8fb1"];
+function spawnConf() {
+  const c = document.getElementById("confetti-container");
+  if (!c) return;
+  const el = document.createElement("div");
+  el.className = "conf";
+  el.style.left = Math.random() * 100 + "vw";
+  el.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+  el.style.width  = (6 + Math.random() * 8) + "px";
+  el.style.height = (6 + Math.random() * 8) + "px";
+  el.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+  const dur = 5 + Math.random() * 8;
+  el.style.animationDuration = dur + "s";
+  el.style.animationDelay = Math.random() * 3 + "s";
+  c.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 3) * 1000);
+}
+for (let i = 0; i < 6; i++) setTimeout(spawnConf, i * 300);
+setInterval(spawnConf, 800);
 
-function updateCounter() {
-  const now = new Date();
-  const diff = now - START_DATE;
+// ===================================================
+// HERO BALONCUKLAR
+// ===================================================
+function spawnBubbles() {
+  const c = document.getElementById("bubbles-container");
+  if (!c) return;
+  for (let i = 0; i < 5; i++) {
+    const b = document.createElement("div");
+    b.className = "bubble";
+    const size = 80 + Math.random() * 200;
+    b.style.width  = size + "px";
+    b.style.height = size + "px";
+    b.style.left   = Math.random() * 100 + "%";
+    b.style.top    = Math.random() * 100 + "%";
+    b.style.animationDuration = (4 + Math.random() * 6) + "s";
+    b.style.animationDelay    = Math.random() * 4 + "s";
+    b.style.opacity = 0.3 + Math.random() * 0.3;
+    c.appendChild(b);
+  }
+}
+spawnBubbles();
+
+// ===================================================
+// SAYAÇ — 28 Ağustos 2025
+// ===================================================
+const START = new Date("2025-08-28T00:00:00");
+function tick() {
+  const diff = Date.now() - START;
   if (diff < 0) return;
-
-  const totalSecs = Math.floor(diff / 1000);
-  const days  = Math.floor(totalSecs / 86400);
-  const hours = Math.floor((totalSecs % 86400) / 3600);
-  const mins  = Math.floor((totalSecs % 3600) / 60);
-  const secs  = totalSecs % 60;
-
-  const el = (id) => document.getElementById(id);
-  if (el("cnt-days"))  animateNum(el("cnt-days"),  days);
-  if (el("cnt-hours")) animateNum(el("cnt-hours"), hours);
-  if (el("cnt-mins"))  animateNum(el("cnt-mins"),  mins);
-  if (el("cnt-secs"))  el("cnt-secs").textContent = String(secs).padStart(2, "0");
+  const s = Math.floor(diff / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = String(v).padStart(2, "0"); };
+  set("cnt-days",  d);
+  set("cnt-hours", h);
+  set("cnt-mins",  m);
+  set("cnt-secs",  sec);
 }
-
-function animateNum(el, target) {
-  const current = parseInt(el.textContent.replace(/,/g, "")) || 0;
-  if (current === target) return;
-  el.textContent = target.toLocaleString("tr-TR");
-}
-
-setInterval(updateCounter, 1000);
-updateCounter();
+tick(); setInterval(tick, 1000);
 
 // ===================================================
-// 4. KALBİ PARTİKÜLLERİ
-// ===================================================
-const PARTICLE_EMOJIS = ["❤️", "🌹", "✨", "💕", "🎵", "🌸", "💫"];
-
-function spawnParticle() {
-  const container = document.getElementById("particles-container");
-  if (!container) return;
-
-  const p = document.createElement("div");
-  p.className = "particle";
-  p.textContent = PARTICLE_EMOJIS[Math.floor(Math.random() * PARTICLE_EMOJIS.length)];
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.fontSize = (0.8 + Math.random() * 1.2) + "rem";
-  const dur = 6 + Math.random() * 8;
-  p.style.animationDuration = dur + "s";
-  p.style.animationDelay = Math.random() * 2 + "s";
-  container.appendChild(p);
-
-  setTimeout(() => p.remove(), (dur + 2) * 1000);
-}
-
-setInterval(spawnParticle, 600);
-// İlk birkaç tane hemen gelsin
-for (let i = 0; i < 8; i++) setTimeout(spawnParticle, i * 200);
-
-// ===================================================
-// 5. NAVBAR
+// NAVBAR
 // ===================================================
 const navbar = document.getElementById("navbar");
-window.addEventListener("scroll", () => {
-  navbar?.classList.toggle("scrolled", window.scrollY > 50);
+window.addEventListener("scroll", () => navbar?.classList.toggle("scrolled", scrollY > 50));
+document.getElementById("hamburger")?.addEventListener("click", () => {
+  document.querySelector(".nav-links")?.classList.toggle("open");
 });
-
-const hamburger = document.getElementById("hamburger");
-const navLinks  = document.querySelector(".nav-links");
-hamburger?.addEventListener("click", () => {
-  navLinks?.classList.toggle("open");
-});
-// Menü linkine tıklayınca kapat
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => navLinks?.classList.remove("open"));
+document.querySelectorAll(".nav-links a").forEach(a => {
+  a.addEventListener("click", () => document.querySelector(".nav-links")?.classList.remove("open"));
 });
 
 // ===================================================
-// 6. SCROLL REVEAL
+// SCROLL REVEAL
 // ===================================================
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); ro.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll(".reveal").forEach(el => ro.observe(el));
 
 // ===================================================
-// 7. MÜZİK OYNATICI
+// MÜZİK OYNATICI
 // ===================================================
-let currentTrack = 0;
-let isPlaying = false;
+let curTrack = 0, playing = false;
+const audio    = document.getElementById("audio");
+const disc     = document.getElementById("player-disc");
+const tTitle   = document.getElementById("track-title");
+const tSub     = document.getElementById("track-sub");
+const pFill    = document.getElementById("progress-fill");
+const pThumb   = document.getElementById("progress-thumb");
+const pTrack   = document.getElementById("progress-track");
+const curT     = document.getElementById("cur-time");
+const durT     = document.getElementById("dur-time");
+const volSlider= document.getElementById("vol");
+const playBtn  = document.getElementById("btn-play");
+const plUl     = document.getElementById("playlist-ul");
 
-const audio       = document.getElementById("audio-player");
-const playBtn     = document.getElementById("play-btn");
-const prevBtn     = document.getElementById("prev-btn");
-const nextBtn     = document.getElementById("next-btn");
-const trackTitle  = document.getElementById("track-title");
-const trackArtist = document.getElementById("track-artist");
-const progressBar = document.getElementById("progress-bar");
-const progressDot = document.getElementById("progress-dot");
-const progressContainer = document.getElementById("progress-container");
-const currentTimeEl = document.getElementById("current-time");
-const durationEl    = document.getElementById("duration");
-const volumeSlider  = document.getElementById("volume-slider");
-const albumArt      = document.getElementById("album-art");
-const playlistUl    = document.getElementById("playlist-ul");
-
-function formatTime(sec) {
-  if (isNaN(sec)) return "0:00";
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return `${m}:${String(s).padStart(2, "0")}`;
-}
+const fmt = s => isNaN(s) ? "0:00" : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
 
 function buildPlaylist() {
-  if (!playlistUl) return;
-  playlistUl.innerHTML = "";
-  songs.forEach((song, idx) => {
+  if (!plUl) return;
+  plUl.innerHTML = "";
+  songs.forEach((s, i) => {
     const li = document.createElement("li");
-    li.className = "playlist-item" + (idx === currentTrack ? " active" : "");
-    li.innerHTML = `
-      <span class="pl-num">${idx + 1}</span>
-      <span class="pl-name">${song.title}</span>
-      <span class="pl-dur">${song.duration}</span>
-    `;
-    li.addEventListener("click", () => loadTrack(idx, true));
-    playlistUl.appendChild(li);
+    li.className = "pl-item" + (i === curTrack ? " active" : "");
+    li.innerHTML = `<span class="pl-n">${i+1}</span><span class="pl-name">${s.title}</span><span class="pl-dur">${s.dur}</span>`;
+    li.addEventListener("click", () => load(i, true));
+    plUl.appendChild(li);
   });
 }
 
-function loadTrack(idx, autoPlay = false) {
-  if (!songs.length) return;
-  currentTrack = idx;
-  const song = songs[idx];
-
-  if (trackTitle)  trackTitle.textContent  = song.title;
-  if (trackArtist) trackArtist.textContent = song.artist;
+function load(idx, autoPlay = false) {
+  curTrack = idx;
+  const s = songs[idx];
+  if (tTitle) tTitle.textContent = s.title;
+  if (tSub) tSub.textContent = s.sub;
   if (audio) {
-    audio.src = song.src;
-    audio.volume = volumeSlider ? parseFloat(volumeSlider.value) : 0.8;
-    if (autoPlay) {
-      audio.play().then(() => setPlaying(true)).catch(() => {});
-    } else {
-      setPlaying(false);
-    }
+    audio.src = s.src;
+    audio.volume = volSlider ? parseFloat(volSlider.value) : 0.8;
+    if (autoPlay) audio.play().then(() => setPlay(true)).catch(() => {});
+    else setPlay(false);
   }
-
-  // Playlist highlight
-  document.querySelectorAll(".playlist-item").forEach((li, i) => {
-    li.classList.toggle("active", i === idx);
-  });
+  document.querySelectorAll(".pl-item").forEach((li, i) => li.classList.toggle("active", i === idx));
 }
 
-function setPlaying(state) {
-  isPlaying = state;
-  if (playBtn) playBtn.textContent = state ? "⏸" : "▶";
-  if (albumArt) {
-    if (state) albumArt.classList.add("spinning");
-    else albumArt.classList.remove("spinning");
-  }
+function setPlay(v) {
+  playing = v;
+  if (playBtn) playBtn.textContent = v ? "⏸" : "▶";
+  disc?.classList.toggle("spinning", v);
 }
 
 playBtn?.addEventListener("click", () => {
   if (!audio) return;
-  if (isPlaying) {
-    audio.pause();
-    setPlaying(false);
-  } else {
-    audio.play().then(() => setPlaying(true)).catch(() => {
-      // Ses dosyası yoksa sessizce devam et
-    });
-  }
+  if (playing) { audio.pause(); setPlay(false); }
+  else audio.play().then(() => setPlay(true)).catch(() => {});
 });
-
-prevBtn?.addEventListener("click", () => {
-  const idx = (currentTrack - 1 + songs.length) % songs.length;
-  loadTrack(idx, isPlaying);
-});
-
-nextBtn?.addEventListener("click", () => {
-  const idx = (currentTrack + 1) % songs.length;
-  loadTrack(idx, isPlaying);
-});
+document.getElementById("btn-prev")?.addEventListener("click", () => load((curTrack - 1 + songs.length) % songs.length, playing));
+document.getElementById("btn-next")?.addEventListener("click", () => load((curTrack + 1) % songs.length, playing));
 
 audio?.addEventListener("timeupdate", () => {
   if (!audio.duration) return;
-  const pct = (audio.currentTime / audio.duration) * 100;
-  if (progressBar) progressBar.style.width = pct + "%";
-  if (progressDot) progressDot.style.left  = pct + "%";
-  if (currentTimeEl) currentTimeEl.textContent = formatTime(audio.currentTime);
+  const p = (audio.currentTime / audio.duration) * 100;
+  if (pFill) pFill.style.width = p + "%";
+  if (pThumb) pThumb.style.left = p + "%";
+  if (curT) curT.textContent = fmt(audio.currentTime);
 });
-
-audio?.addEventListener("loadedmetadata", () => {
-  if (durationEl) durationEl.textContent = formatTime(audio.duration);
+audio?.addEventListener("loadedmetadata", () => { if (durT) durT.textContent = fmt(audio.duration); });
+audio?.addEventListener("ended", () => load((curTrack + 1) % songs.length, true));
+pTrack?.addEventListener("click", e => {
+  if (!audio?.duration) return;
+  const r = pTrack.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
 });
-
-audio?.addEventListener("ended", () => {
-  const idx = (currentTrack + 1) % songs.length;
-  loadTrack(idx, true);
-});
-
-progressContainer?.addEventListener("click", (e) => {
-  if (!audio || !audio.duration) return;
-  const rect = progressContainer.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = pct * audio.duration;
-});
-
-volumeSlider?.addEventListener("input", () => {
-  if (audio) audio.volume = parseFloat(volumeSlider.value);
-});
+volSlider?.addEventListener("input", () => { if (audio) audio.volume = parseFloat(volSlider.value); });
 
 buildPlaylist();
-loadTrack(0, false);
+load(0, false);
 
 // ===================================================
-// 8. GALERİ LİGHTBOX
+// GALERİ
 // ===================================================
-const lightbox  = document.getElementById("lightbox");
-const lbImg     = document.getElementById("lb-img");
-const lbCaption = document.getElementById("lb-caption");
-const lbOverlay = document.getElementById("lb-overlay");
-const lbClose   = document.getElementById("lb-close");
-const lbPrev    = document.getElementById("lb-prev");
-const lbNext    = document.getElementById("lb-next");
+const grid = document.getElementById("gallery-grid");
+if (grid) {
+  photos.forEach((ph, idx) => {
+    const card = document.createElement("div");
+    card.className = "gallery-card";
+    card.innerHTML = `
+      <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+      <div class="img-placeholder" style="display:none"><span>📷</span>Fotoğraf ${idx+1}</div>
+      <div class="gallery-hover-overlay">🔍</div>
+    `;
+    card.addEventListener("click", () => openLb(idx));
+    grid.appendChild(card);
+  });
+}
 
-const galleryCards = document.querySelectorAll(".gallery-card");
-let currentPhoto = 0;
+// Lightbox
+const lb       = document.getElementById("lightbox");
+const lbImg    = document.getElementById("lb-img");
+const lbCap    = document.getElementById("lb-cap");
+let lbCur = 0;
 
-function openLightbox(idx) {
-  const card = galleryCards[idx];
-  if (!card) return;
-  const img  = card.querySelector("img");
-  const cap  = card.querySelector(".gallery-caption");
-
-  if (lbImg) {
-    lbImg.src = img ? img.src : "";
-    lbImg.alt = img ? img.alt : "";
-  }
-  if (lbCaption) lbCaption.textContent = cap ? cap.textContent : "";
-  currentPhoto = idx;
-  lightbox?.classList.add("open");
+function openLb(idx) {
+  lbCur = idx;
+  const ph = photos[idx];
+  if (lbImg) { lbImg.src = ph.src; lbImg.alt = ph.cap || `Anı ${idx+1}`; }
+  if (lbCap) lbCap.textContent = ph.cap || "";
+  lb?.classList.add("open");
   document.body.style.overflow = "hidden";
 }
+function closeLb() { lb?.classList.remove("open"); document.body.style.overflow = ""; }
 
-function closeLightbox() {
-  lightbox?.classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-galleryCards.forEach((card, idx) => {
-  card.addEventListener("click", () => openLightbox(idx));
-});
-
-lbOverlay?.addEventListener("click", closeLightbox);
-lbClose?.addEventListener("click", closeLightbox);
-
-lbPrev?.addEventListener("click", (e) => {
-  e.stopPropagation();
-  openLightbox((currentPhoto - 1 + galleryCards.length) % galleryCards.length);
-});
-lbNext?.addEventListener("click", (e) => {
-  e.stopPropagation();
-  openLightbox((currentPhoto + 1) % galleryCards.length);
-});
-
-document.addEventListener("keydown", (e) => {
-  if (!lightbox?.classList.contains("open")) return;
-  if (e.key === "Escape") closeLightbox();
-  if (e.key === "ArrowLeft")  lbPrev?.click();
-  if (e.key === "ArrowRight") lbNext?.click();
+document.getElementById("lb-backdrop")?.addEventListener("click", closeLb);
+document.getElementById("lb-x")?.addEventListener("click", closeLb);
+document.getElementById("lb-prev")?.addEventListener("click", e => { e.stopPropagation(); openLb((lbCur - 1 + photos.length) % photos.length); });
+document.getElementById("lb-next")?.addEventListener("click", e => { e.stopPropagation(); openLb((lbCur + 1) % photos.length); });
+document.addEventListener("keydown", e => {
+  if (!lb?.classList.contains("open")) return;
+  if (e.key === "Escape") closeLb();
+  if (e.key === "ArrowLeft")  document.getElementById("lb-prev")?.click();
+  if (e.key === "ArrowRight") document.getElementById("lb-next")?.click();
 });
 
 // ===================================================
-// 9. QR KOD OLUŞTURMA
+// QR KOD — Otomatik Oluştur
 // ===================================================
-const qrUrlInput   = document.getElementById("qr-url-input");
-const qrGenBtn     = document.getElementById("qr-generate-btn");
-const qrCanvas     = document.getElementById("qr-code-canvas");
-const qrActions    = document.getElementById("qr-actions");
-const qrDownload   = document.getElementById("qr-download-png");
+const QR_URL = "https://muhammed-eminbenzer.github.io/Melisim/";
+const qrWrap = document.getElementById("qr-canvas-wrap");
 
-let lastQrUrl = "";
-
-function generateQR(url) {
-  if (!url || !qrCanvas) return;
-  qrCanvas.innerHTML = "";
-
+if (qrWrap && typeof QRCode !== "undefined") {
   QRCode.toCanvas(
     document.createElement("canvas"),
-    url,
-    {
-      width: 260,
-      margin: 2,
-      color: { dark: "#0d0812", light: "#ffffff" },
-      errorCorrectionLevel: "H",
-    },
+    QR_URL,
+    { width: 240, margin: 2, color: { dark: "#1a0a2e", light: "#ffffff" }, errorCorrectionLevel: "H" },
     (err, canvas) => {
-      if (err) { console.error(err); return; }
-      qrCanvas.appendChild(canvas);
-      if (qrActions) qrActions.style.display = "flex";
-      qrActions.style.flexDirection = "column";
-      qrActions.style.alignItems = "center";
-      qrActions.style.gap = "0.8rem";
-      lastQrUrl = url;
+      if (!err) qrWrap.appendChild(canvas);
     }
   );
 }
 
-qrGenBtn?.addEventListener("click", () => {
-  const url = qrUrlInput?.value.trim();
-  if (!url) { alert("Lütfen bir web sitesi adresi gir!"); return; }
-  generateQR(url);
-});
-
-qrUrlInput?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") qrGenBtn?.click();
-});
-
 // PNG İndir
-qrDownload?.addEventListener("click", () => {
-  if (!lastQrUrl) return;
-
-  // Yüksek çözünürlüklü canvas
-  const tempCanvas = document.createElement("canvas");
+document.getElementById("qr-dl-btn")?.addEventListener("click", () => {
+  if (typeof QRCode === "undefined") return;
+  const tmp = document.createElement("canvas");
   QRCode.toCanvas(
-    tempCanvas,
-    lastQrUrl,
-    {
-      width: 600,
-      margin: 3,
-      color: { dark: "#0d0812", light: "#ffffff" },
-      errorCorrectionLevel: "H",
-    },
+    tmp, QR_URL,
+    { width: 800, margin: 3, color: { dark: "#1a0a2e", light: "#ffffff" }, errorCorrectionLevel: "H" },
     (err, canvas) => {
-      if (err) { console.error(err); return; }
-
-      // Kalp logosu ekle
-      const ctx = canvas.getContext("2d");
-      ctx.font = "bold 48px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
-      ctx.fillRect(canvas.width/2 - 32, canvas.height/2 - 32, 64, 64);
-      ctx.fillStyle = "#e8547a";
-      ctx.fillText("❤", canvas.width/2, canvas.height/2);
-
+      if (err) return;
       const link = document.createElement("a");
-      link.download = "qr-kod-sevgilim.png";
+      link.download = "melis-qr-kod.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
     }
   );
-});
-
-// ===================================================
-// 10. DOĞUM GÜNÜ KUTLAMA ANİMASYONU
-// ===================================================
-function launchFirework(container) {
-  const fw = document.createElement("div");
-  const emojis = ["🎆", "🎇", "✨", "🎉", "🌟", "💥", "🎊"];
-  fw.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  fw.style.cssText = `
-    position: absolute;
-    left: ${Math.random() * 100}%;
-    top: ${Math.random() * 100}%;
-    font-size: ${1.5 + Math.random() * 2}rem;
-    animation: fw-pop 1.5s ease-out forwards;
-    pointer-events: none;
-  `;
-  container.appendChild(fw);
-  setTimeout(() => fw.remove(), 1500);
-}
-
-// Doğum günü bölümü görününce havai fişek
-const bdaySection = document.getElementById("birthday");
-const bdayFw      = document.getElementById("bday-fw");
-if (bdaySection && bdayFw) {
-  // CSS animasyonu ekle
-  const style = document.createElement("style");
-  style.textContent = `
-    @keyframes fw-pop {
-      0%   { transform: scale(0) translateY(0); opacity: 1; }
-      60%  { transform: scale(1.4) translateY(-30px); opacity: 1; }
-      100% { transform: scale(0.8) translateY(-60px); opacity: 0; }
-    }
-  `;
-  document.head.appendChild(style);
-
-  const bdayObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        let count = 0;
-        const interval = setInterval(() => {
-          launchFirework(bdayFw);
-          if (++count > 20) clearInterval(interval);
-        }, 200);
-      }
-    });
-  }, { threshold: 0.4 });
-
-  bdayObserver.observe(bdaySection);
-}
-
-// ===================================================
-// 11. SMOOTH NAV ACTIVE STATE
-// ===================================================
-const sections = document.querySelectorAll("section[id]");
-const navAnchors = document.querySelectorAll(".nav-links a");
-
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navAnchors.forEach(a => {
-        a.style.color = a.getAttribute("href") === "#" + entry.target.id
-          ? "var(--accent-cream)"
-          : "";
-      });
-    }
-  });
-}, { threshold: 0.3 });
-
-sections.forEach(s => sectionObserver.observe(s));
-
-// ===================================================
-// 12. YÜKLENİŞ ANİMASYONU
-// ===================================================
-window.addEventListener("load", () => {
-  document.body.classList.add("loaded");
 });

@@ -1,451 +1,278 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seninle Her Şey Daha Güzel 🌹</title>
-  <meta name="description" content="Sana özel hazırlanmış, kalbimden gelen bir hediye. İyi ki doğdun, iyi ki varsın." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Melis'e 🌸</title>
+  <meta name="description" content="Sana özel bir sürpriz. 5 Ağustos doğum günün kutlu olsun!"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- Kalp Partikülleri -->
-  <div id="particles-container"></div>
+  <!-- Konfeti Konteyneri -->
+  <div id="confetti-container"></div>
 
-  <!-- ===== NAV ===== -->
+  <!-- NAV -->
   <nav id="navbar">
-    <div class="nav-logo">❤️ 5 Ağustos</div>
+    <div class="nav-logo">🌸 Melis'e</div>
     <ul class="nav-links">
-      <li><a href="#hero">Başlangıç</a></li>
-      <li><a href="#music">Müzikler</a></li>
+      <li><a href="#hero">Ana Sayfa</a></li>
+      <li><a href="#music">Şarkılar</a></li>
       <li><a href="#gallery">Anılar</a></li>
+      <li><a href="#videos">Videolar</a></li>
       <li><a href="#letter">Mektup</a></li>
       <li><a href="#timeline">Hikayemiz</a></li>
       <li><a href="#qr">QR Kod</a></li>
     </ul>
-    <div class="nav-hamburger" id="hamburger">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
   </nav>
 
-  <!-- ===== HERO ===== -->
+  <!-- HERO -->
   <section id="hero">
-    <div class="hero-bg-overlay"></div>
+    <div class="hero-bubbles" id="bubbles-container"></div>
     <div class="hero-content">
-      <div class="hero-badge fade-in">🌹 5 Ağustos 2026 · Doğum Günün Kutlu Olsun</div>
-      <h1 class="hero-title fade-in delay-1">
-        Seninle Her Şey<br/><em>Daha Güzel</em>
-      </h1>
-      <p class="hero-sub fade-in delay-2">
-        28 Ağustos 2025'ten beri<br/>her gün bir şans gibi geliyor.
-      </p>
-      <div class="hero-counter fade-in delay-3" id="days-together">
-        <div class="counter-box">
-          <span class="counter-num" id="cnt-days">0</span>
-          <span class="counter-label">Gün</span>
-        </div>
-        <div class="counter-box">
-          <span class="counter-num" id="cnt-hours">0</span>
-          <span class="counter-label">Saat</span>
-        </div>
-        <div class="counter-box">
-          <span class="counter-num" id="cnt-mins">0</span>
-          <span class="counter-label">Dakika</span>
-        </div>
-        <div class="counter-box">
-          <span class="counter-num" id="cnt-secs">0</span>
-          <span class="counter-label">Saniye</span>
+      <div class="hero-badge">🎂 5 Ağustos 2026 · Doğum Günün Kutlu Olsun!</div>
+      <h1 class="hero-title">Merhaba <em>Melis</em> 👋</h1>
+      <p class="hero-sub">Bunu görmen için biraz uğraştım ama değdi 😄<br/>28 Ağustos 2025'ten beri seninle her şey çok daha güzel.</p>
+
+      <div class="together-counter">
+        <p class="counter-label-top">birlikte geçirdiğimiz süre 🥰</p>
+        <div class="counter-row">
+          <div class="counter-box"><span class="cnum" id="cnt-days">0</span><span class="clbl">gün</span></div>
+          <div class="counter-sep">:</div>
+          <div class="counter-box"><span class="cnum" id="cnt-hours">0</span><span class="clbl">saat</span></div>
+          <div class="counter-sep">:</div>
+          <div class="counter-box"><span class="cnum" id="cnt-mins">0</span><span class="clbl">dakika</span></div>
+          <div class="counter-sep">:</div>
+          <div class="counter-box"><span class="cnum" id="cnt-secs">0</span><span class="clbl">saniye</span></div>
         </div>
       </div>
-      <p class="counter-subtitle">birlikte geçirdiğimiz zaman</p>
-      <a href="#music" class="hero-btn">Keşfet ↓</a>
+
+      <div class="hero-btns">
+        <a href="#music" class="btn-primary">🎵 Şarkıları Dinle</a>
+        <a href="#gallery" class="btn-secondary">📸 Anılarımıza Bak</a>
+      </div>
     </div>
-    <div class="hero-scroll-indicator">
-      <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
-    </div>
+    <div class="hero-scroll-hint">kaydır ↓</div>
   </section>
 
-  <!-- ===== MÜZİK BÖLÜMÜ ===== -->
+  <!-- MÜZİK -->
   <section id="music">
     <div class="section-header">
       <span class="section-tag">🎵 Sadece Sana</span>
-      <h2 class="section-title">Senin İçin Yaptığım Şarkılar</h2>
-      <p class="section-sub">Her nota seni düşünerek yazıldı.</p>
+      <h2>Senin İçin Yaptığım Şarkılar</h2>
+      <p>Her nota seni düşünerek çıktı 🎸</p>
     </div>
 
-    <div class="player-wrapper">
-      <!-- Ana Oynatıcı -->
+    <div class="music-layout">
       <div class="main-player">
-        <div class="album-art-container">
-          <div class="album-art" id="album-art">
-            <div class="album-vinyl">
-              <div class="album-vinyl-inner"></div>
-            </div>
-            <div class="album-note">🎵</div>
+        <div class="player-disc-wrap">
+          <div class="player-disc" id="player-disc">
+            <div class="disc-ring r1"></div>
+            <div class="disc-ring r2"></div>
+            <div class="disc-center">🎵</div>
           </div>
-          <div class="album-glow"></div>
         </div>
-        <div class="player-info">
-          <h3 class="track-title" id="track-title">Şarkı 1</h3>
-          <p class="track-artist" id="track-artist">Senin için 🎸</p>
+        <div class="player-meta">
+          <p class="now-playing-tag">▶ Şu an çalıyor</p>
+          <h3 id="track-title">Şarkı 1</h3>
+          <p id="track-sub">Senin için 🎸</p>
         </div>
-        <div class="player-progress-wrap">
-          <span class="time" id="current-time">0:00</span>
-          <div class="progress-bar-container" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-            <div class="progress-dot" id="progress-dot"></div>
+        <div class="progress-wrap">
+          <span id="cur-time">0:00</span>
+          <div class="progress-track" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-thumb" id="progress-thumb"></div>
           </div>
-          <span class="time" id="duration">0:00</span>
+          <span id="dur-time">0:00</span>
         </div>
         <div class="player-controls">
-          <button class="ctrl-btn" id="prev-btn" title="Önceki">⏮</button>
-          <button class="ctrl-btn play-btn" id="play-btn" title="Oynat">▶</button>
-          <button class="ctrl-btn" id="next-btn" title="Sonraki">⏭</button>
+          <button id="btn-prev" class="ctrl">⏮</button>
+          <button id="btn-play" class="ctrl ctrl-play">▶</button>
+          <button id="btn-next" class="ctrl">⏭</button>
         </div>
-        <div class="volume-wrap">
+        <div class="vol-row">
           <span>🔈</span>
-          <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.8" />
+          <input type="range" id="vol" min="0" max="1" step="0.01" value="0.8"/>
           <span>🔊</span>
         </div>
       </div>
 
-      <!-- Çalma Listesi -->
-      <div class="playlist">
-        <h4 class="playlist-title">Çalma Listesi</h4>
-        <ul id="playlist-ul">
-          <!-- JS ile doldurulacak -->
-        </ul>
-        <div class="add-music-hint">
-          <span>🎤</span>
-          <p>Şarkılarını eklemek için <strong>songs/</strong> klasörüne .mp3 dosyalarını at,<br/>ardından <strong>script.js</strong> içindeki <code>songs</code> listesini güncelle.</p>
-        </div>
+      <div class="playlist-panel">
+        <h4>🎶 Çalma Listesi</h4>
+        <ul id="playlist-ul"></ul>
       </div>
     </div>
-
-    <audio id="audio-player"></audio>
+    <audio id="audio"></audio>
   </section>
 
-  <!-- ===== GALERİ ===== -->
+  <!-- GALERİ -->
   <section id="gallery">
     <div class="section-header">
       <span class="section-tag">📸 Anılarımız</span>
-      <h2 class="section-title">Birlikte Yaşadıklarımız</h2>
-      <p class="section-sub">Her kare bir hazine.</p>
+      <h2>Birlikte Geçirdiğimiz Anlar</h2>
+      <p>Tıkla, büyüt, hisset 💛</p>
     </div>
 
-    <div class="gallery-grid" id="gallery-grid">
-      <!-- Placeholder kartlar — kendi fotoğraflarınla değiştir -->
-      <div class="gallery-card" data-index="0">
-        <div class="gallery-img-wrap">
-          <img src="photos/foto1.jpg" alt="Anı 1" onerror="this.parentElement.classList.add('no-img')" />
-          <div class="gallery-placeholder">📷<br/>foto1.jpg</div>
-        </div>
-        <div class="gallery-caption">İlk anımız ✨</div>
-      </div>
-      <div class="gallery-card" data-index="1">
-        <div class="gallery-img-wrap">
-          <img src="photos/foto2.jpg" alt="Anı 2" onerror="this.parentElement.classList.add('no-img')" />
-          <div class="gallery-placeholder">📷<br/>foto2.jpg</div>
-        </div>
-        <div class="gallery-caption">Seninle 🌹</div>
-      </div>
-      <div class="gallery-card" data-index="2">
-        <div class="gallery-img-wrap">
-          <img src="photos/foto3.jpg" alt="Anı 3" onerror="this.parentElement.classList.add('no-img')" />
-          <div class="gallery-placeholder">📷<br/>foto3.jpg</div>
-        </div>
-        <div class="gallery-caption">Güzel günler 🌸</div>
-      </div>
-      <div class="gallery-card" data-index="3">
-        <div class="gallery-img-wrap">
-          <img src="photos/foto4.jpg" alt="Anı 4" onerror="this.parentElement.classList.add('no-img')" />
-          <div class="gallery-placeholder">📷<br/>foto4.jpg</div>
-        </div>
-        <div class="gallery-caption">Her yerde sen 💫</div>
-      </div>
-      <div class="gallery-card" data-index="4">
-        <div class="gallery-img-wrap">
-          <img src="photos/foto5.jpg" alt="Anı 5" onerror="this.parentElement.classList.add('no-img')" />
-          <div class="gallery-placeholder">📷<br/>foto5.jpg</div>
-        </div>
-        <div class="gallery-caption">En sevdiğim an 🎶</div>
-      </div>
-      <div class="gallery-card" data-index="5">
-        <div class="gallery-img-wrap">
-          <img src="photos/foto6.jpg" alt="Anı 6" onerror="this.parentElement.classList.add('no-img')" />
-          <div class="gallery-placeholder">📷<br/>foto6.jpg</div>
-        </div>
-        <div class="gallery-caption">Birlikte 🌙</div>
-      </div>
+    <div class="gallery-masonry" id="gallery-grid">
+      <!-- JS ile doldurulacak -->
     </div>
 
     <!-- Lightbox -->
     <div id="lightbox" class="lightbox">
-      <div class="lightbox-overlay" id="lb-overlay"></div>
-      <button class="lb-close" id="lb-close">✕</button>
-      <button class="lb-nav lb-prev" id="lb-prev">‹</button>
-      <div class="lb-img-wrap">
-        <img id="lb-img" src="" alt="" />
-        <p id="lb-caption" class="lb-caption"></p>
+      <div class="lb-backdrop" id="lb-backdrop"></div>
+      <button class="lb-x" id="lb-x">✕</button>
+      <button class="lb-arrow lb-left" id="lb-prev">‹</button>
+      <div class="lb-stage">
+        <img id="lb-img" src="" alt=""/>
+        <p id="lb-cap"></p>
       </div>
-      <button class="lb-nav lb-next" id="lb-next">›</button>
+      <button class="lb-arrow lb-right" id="lb-next">›</button>
     </div>
   </section>
 
-  <!-- ===== MEKTUP ===== -->
-  <section id="letter">
-    <div class="letter-container">
-      <div class="letter-envelope">
-        <div class="envelope-flap"></div>
-        <div class="envelope-body">
-          <div class="letter-paper">
-            <div class="letter-header">
-              <span class="letter-date">5 Ağustos 2026</span>
-              <div class="letter-rose">🌹</div>
-            </div>
-            <h2 class="letter-title">Sevgili Sana,</h2>
-            <div class="letter-text">
-              <p>
-                28 Ağustos 2025'te hayatıma girdiğinde, dünyanın nasıl bu kadar güzel olabileceğini anlamamıştım. Ama şimdi anlıyorum — sen varsın diye.
-              </p>
-              <p>
-                Seninle geçirdiğim her an, zihnimde bir müzik notası gibi yerleşiyor. Güldüğünde tüm kötü şeyler duruyor. Yanımda olduğunda, her şey yerli yerine oturuyor.
-              </p>
-              <p>
-                Bu şarkıları, bu kelimeleri, bu anları sana adadım. Çünkü sen benim en güzel ilhamımsın.
-              </p>
-              <p class="letter-ps">
-                İyi ki doğdun. İyi ki varsın. İyi ki benimsin. ❤️
-              </p>
-            </div>
-            <div class="letter-signature">
-              <p>Sonsuz sevgiyle,</p>
-              <p class="signature-name">Senin ❤️</p>
-            </div>
-          </div>
-        </div>
+  <!-- VİDEOLAR -->
+  <section id="videos">
+    <div class="section-header">
+      <span class="section-tag">🎬 Videolar</span>
+      <h2>Hareket Eden Anılar</h2>
+      <p>Sesini aç! 🔊</p>
+    </div>
+    <div class="videos-grid">
+      <div class="video-card reveal">
+        <video controls playsinline preload="metadata" class="site-video">
+          <source src="videos/video1.mp4" type="video/mp4"/>
+        </video>
+        <p class="video-cap">🎬 Video 1</p>
+      </div>
+      <div class="video-card reveal">
+        <video controls playsinline preload="metadata" class="site-video">
+          <source src="videos/video2.mp4" type="video/mp4"/>
+        </video>
+        <p class="video-cap">🎬 Video 2</p>
       </div>
     </div>
+  </section>
+
+  <!-- MEKTUP -->
+  <section id="letter">
     <div class="section-header">
       <span class="section-tag">💌 Kalpten</span>
-      <h2 class="section-title">Sana Bir Mektup Yazdım</h2>
+      <h2>Sana Bir Şeyler Yazdım</h2>
+    </div>
+    <div class="letter-wrap">
+      <div class="letter-card reveal">
+        <div class="letter-top">
+          <span>5 Ağustos 2026</span>
+          <span>🌸</span>
+        </div>
+        <h3>Merhaba Melis,</h3>
+        <p>28 Ağustos 2025'te tanıştığımızda böyle bir şey yapacağımı bilmiyordum. Ama sen beni hep böyle şeyler yapmaya itmişsindir zaten 😄</p>
+        <p>Seninle geçen her an farklı. Güldüğünde başka bir şey oluyor içimde. Yanımda olduğunda her şey daha kolay geliyor.</p>
+        <p>Bu şarkıları seni düşünerek yaptım. Fotoğraflara baktığımda her seferinde gülümsüyorum. Bu sayfadaki her şey sen için.</p>
+        <p class="letter-ps">İyi ki doğdun. İyi ki varsın. İyi ki benimsin. ❤️</p>
+        <div class="letter-sig">Seninle olmak istiyorum,<br/><strong>Senin ❤️</strong></div>
+      </div>
     </div>
   </section>
 
-  <!-- ===== ZAMANÇİZELGESİ ===== -->
+  <!-- ZAMANÇİZELGESİ -->
   <section id="timeline">
     <div class="section-header">
       <span class="section-tag">📅 Hikayemiz</span>
-      <h2 class="section-title">Birlikte Yazdığımız Sayfalarda</h2>
-      <p class="section-sub">Her anın bir değeri var.</p>
+      <h2>Başından Beri</h2>
     </div>
-
-    <div class="timeline-wrap">
-      <div class="timeline-line"></div>
-
-      <div class="timeline-item left reveal">
-        <div class="timeline-dot">🌟</div>
-        <div class="timeline-card">
+    <div class="tl-wrap">
+      <div class="tl-line"></div>
+      <div class="tl-item tl-left reveal">
+        <div class="tl-dot">🌟</div>
+        <div class="tl-card">
           <span class="tl-date">28 Ağustos 2025</span>
-          <h3 class="tl-title">İlk Buluşma</h3>
-          <p class="tl-desc">Her şeyin başladığı o gün. Seni ilk gördüğümde kalbim hızlandı.</p>
+          <h3>İlk Gün</h3>
+          <p>Her şeyin başladığı o gün. Seni ilk gördüğümde kalbim hızlandı.</p>
         </div>
       </div>
-
-      <div class="timeline-item right reveal">
-        <div class="timeline-dot">🎵</div>
-        <div class="timeline-card">
-          <span class="tl-date">2025 — 2026</span>
-          <h3 class="tl-title">İlk Şarkım</h3>
-          <p class="tl-desc">Seni düşünerek yazdığım ilk şarkı. Kafamda dönen melodiler senden geliyordu.</p>
+      <div class="tl-item tl-right reveal">
+        <div class="tl-dot">🎵</div>
+        <div class="tl-card">
+          <span class="tl-date">Sonraki Günler</span>
+          <h3>İlk Şarkı</h3>
+          <p>Seni düşünerek yazdığım ilk şarkı. Kafamda dönen melodiler senden geliyordu.</p>
         </div>
       </div>
-
-      <div class="timeline-item left reveal">
-        <div class="timeline-dot">🌹</div>
-        <div class="timeline-card">
-          <span class="tl-date">Güzel Anlar</span>
-          <h3 class="tl-title">Seninle Keşfettiklerimiz</h3>
-          <p class="tl-desc">Her gün yeni bir şey keşfediyoruz birlikte. Daha çok anımız olacak.</p>
+      <div class="tl-item tl-left reveal">
+        <div class="tl-dot">📸</div>
+        <div class="tl-card">
+          <span class="tl-date">Birlikte</span>
+          <h3>Bu Fotoğraflar</h3>
+          <p>Her kare bir anı. Bu sayfaya koyduğum tüm fotoğraflar benim için çok değerli.</p>
         </div>
       </div>
-
-      <div class="timeline-item right reveal">
-        <div class="timeline-dot">🎂</div>
-        <div class="timeline-card">
+      <div class="tl-item tl-right reveal">
+        <div class="tl-dot">🎂</div>
+        <div class="tl-card">
           <span class="tl-date">5 Ağustos 2026</span>
-          <h3 class="tl-title">Doğum Günün 🎉</h3>
-          <p class="tl-desc">Bu özel günde, sana olan sevgimi tüm dünyaya ilan etmek istedim. İyi ki doğdun.</p>
+          <h3>Doğum Günün 🎉</h3>
+          <p>Bu özel günde, sana olan sevgimi kendi yaptığım bir web sitesiyle göstermek istedim 😄</p>
         </div>
       </div>
-
-      <div class="timeline-item left reveal">
-        <div class="timeline-dot">💫</div>
-        <div class="timeline-card">
-          <span class="tl-date">Gelecek...</span>
-          <h3 class="tl-title">Daha Çok Anı</h3>
-          <p class="tl-desc">Henüz yazılmamış sayfalar bizi bekliyor. Seninle her şey mümkün.</p>
+      <div class="tl-item tl-left reveal">
+        <div class="tl-dot">💫</div>
+        <div class="tl-card">
+          <span class="tl-date">Devam edecek...</span>
+          <h3>Daha Çok Anı</h3>
+          <p>Henüz yazılmamış sayfalar var. Hepsini seninle yazmak istiyorum.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== SEVGİ NOTLARI ===== -->
+  <!-- SEVGİ NOTLARI -->
   <section id="notes">
     <div class="section-header">
-      <span class="section-tag">💬 Sana Dair</span>
-      <h2 class="section-title">Hep Aklımda Kalanlar</h2>
+      <span class="section-tag">💬 Aklımda Kalanlar</span>
+      <h2>Sana Dair Düşünceler</h2>
     </div>
-    <div class="notes-grid">
-      <div class="note-card reveal">
-        <span class="note-icon">🌸</span>
-        <p>"Seninle geçen her saniye, en iyi anlarımdan biri."</p>
-      </div>
-      <div class="note-card reveal">
-        <span class="note-icon">🎵</span>
-        <p>"Sen olmasaydın bu şarkılar olmazdı. Sen benim ilhamımsın."</p>
-      </div>
-      <div class="note-card reveal">
-        <span class="note-icon">🌙</span>
-        <p>"Gece seni düşündüğümde, uyku gelmez — ama sorun değil."</p>
-      </div>
-      <div class="note-card reveal">
-        <span class="note-icon">✨</span>
-        <p>"Güldüğünde her şey güzel oluyor. Hep gül."</p>
-      </div>
-      <div class="note-card reveal">
-        <span class="note-icon">❤️</span>
-        <p>"28 Ağustos'tan bu yana, her gün daha çok seviyorum."</p>
-      </div>
-      <div class="note-card reveal">
-        <span class="note-icon">🌹</span>
-        <p>"Seninle yazılacak daha çok sayfa var. Sabırsızlanıyorum."</p>
-      </div>
+    <div class="notes-row">
+      <div class="note reveal"><span>😄</span><p>"Seninle gülerken zaman nasıl geçiyor anlamıyorum."</p></div>
+      <div class="note reveal"><span>🎵</span><p>"En iyi şarkıları hep seni düşünürken yazıyorum."</p></div>
+      <div class="note reveal"><span>📸</span><p>"Bu fotoğraflara her baktığımda gülümsüyorum."</p></div>
+      <div class="note reveal"><span>🌙</span><p>"Geç saatlerde konuşmalarımız hep en iyisi oluyor."</p></div>
+      <div class="note reveal"><span>❤️</span><p>"28 Ağustos'tan bu yana her gün daha çok."</p></div>
+      <div class="note reveal"><span>🌸</span><p>"Seninle yazılacak daha çok sayfa var. Sabırsızlanıyorum."</p></div>
     </div>
   </section>
 
-  <!-- ===== DOĞUM GÜNÜ SAYACI ===== -->
-  <section id="birthday">
-    <div class="bday-container">
-      <div class="bday-fireworks" id="bday-fw"></div>
-      <div class="bday-content">
-        <div class="bday-icon">🎂</div>
-        <h2 class="bday-title">İyi Ki Doğdun!</h2>
-        <p class="bday-sub">5 Ağustos 2026</p>
-        <div class="bday-age-box">
-          <p>Bugün dünyaya bir hazine geldi. Sen.</p>
-        </div>
-        <div class="bday-wishes">
-          <div class="wish-item">🎁 En güzel dilekler</div>
-          <div class="wish-item">🌟 Sonsuz mutluluk</div>
-          <div class="wish-item">🎵 Müzik dolu günler</div>
-          <div class="wish-item">💕 Seninle her şey</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== QR KOD ===== -->
+  <!-- QR KOD -->
   <section id="qr">
     <div class="section-header">
       <span class="section-tag">📱 Plaket İçin</span>
-      <h2 class="section-title">QR Kodunu İndir</h2>
-      <p class="section-sub">Bu kodu lazer kesimci plaketine koydurup arkadaşlarınla paylaş.</p>
+      <h2>QR Kodunu İndir</h2>
+      <p>Bu kodu lazer kesimciye gönder, plakete işlet!</p>
     </div>
-
-    <div class="qr-wrapper">
-      <div class="qr-card">
-        <div class="qr-url-wrap">
-          <label class="qr-label">Web Sitesi Adresi</label>
-          <div class="qr-input-row">
-            <input type="text" id="qr-url-input" placeholder="https://kullaniciadi.github.io/sevgilim" />
-            <button id="qr-generate-btn">QR Oluştur</button>
-          </div>
-          <p class="qr-hint">GitHub Pages adresini aldıktan sonra buraya yapıştır ve "QR Oluştur" butonuna bas.</p>
-        </div>
-
-        <div class="qr-display" id="qr-display">
-          <div id="qr-code-canvas"></div>
-          <div class="qr-overlay-logo">❤️</div>
-        </div>
-
-        <div class="qr-actions" id="qr-actions" style="display:none">
-          <button id="qr-download-png" class="qr-dl-btn">⬇ PNG İndir (Yüksek Çözünürlük)</button>
-          <p class="qr-dl-hint">İndirdiğin PNG dosyasını lazer kesimciye gönderebilirsin (500×500px).</p>
-        </div>
+    <div class="qr-box">
+      <div class="qr-display" id="qr-display">
+        <div id="qr-canvas-wrap"></div>
       </div>
-
-      <div class="qr-instructions">
-        <h3>Nasıl Kullanılır?</h3>
-        <ol>
-          <li>📦 Siteyi GitHub Pages ile yayınla (aşağıdaki rehbere bak)</li>
-          <li>🔗 Aldığın adresi yukarıdaki kutuya yapıştır</li>
-          <li>🖨 "QR Oluştur" butonuna bas</li>
-          <li>⬇ PNG olarak indir</li>
-          <li>🔖 Lazer kesimciye gönder → plakete işlet!</li>
-        </ol>
+      <div class="qr-right">
+        <p class="qr-url-show">🔗 <strong>https://muhammed-eminbenzer.github.io/Melisim/</strong></p>
+        <p class="qr-note">Bu QR koda telefon kamerasını tutunca direkt siteye gidilir.</p>
+        <button id="qr-dl-btn" class="btn-primary">⬇ Yüksek Çözünürlük PNG İndir</button>
+        <p class="qr-hint">İndirilen dosyayı lazer kesimciye gönderebilirsin.</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== DEPLOY REHBERİ ===== -->
-  <section id="deploy">
-    <div class="section-header">
-      <span class="section-tag">🚀 Yayına Al</span>
-      <h2 class="section-title">Siteyi Ücretsiz Yayınla</h2>
-      <p class="section-sub">GitHub Pages ile tamamen ücretsiz, kalıcı bir adres al.</p>
-    </div>
-
-    <div class="deploy-steps">
-      <div class="deploy-step reveal">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>GitHub Hesabı Aç</h3>
-          <p><a href="https://github.com" target="_blank" rel="noopener">github.com</a> adresine git ve ücretsiz hesap oluştur.</p>
-        </div>
-      </div>
-      <div class="deploy-step reveal">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Yeni Repository Oluştur</h3>
-          <p>"New repository" butonuna bas. İsim: <code>sevgilim</code> (veya istediğin bir isim). Public olarak ayarla.</p>
-        </div>
-      </div>
-      <div class="deploy-step reveal">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Dosyaları Yükle</h3>
-          <p>"Upload files" seçeneğiyle tüm site dosyalarını yükle: <code>index.html</code>, <code>style.css</code>, <code>script.js</code>, <code>photos/</code>, <code>songs/</code></p>
-        </div>
-      </div>
-      <div class="deploy-step reveal">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>Pages'i Aktif Et</h3>
-          <p>Repository Ayarlar → Pages → Source: "Deploy from a branch" → Branch: main → Save</p>
-        </div>
-      </div>
-      <div class="deploy-step reveal">
-        <div class="step-num">5</div>
-        <div class="step-content">
-          <h3>Adresini Al! 🎉</h3>
-          <p>Birkaç dakika içinde <code>https://kullaniciadın.github.io/sevgilim</code> adresi aktif olacak.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== FOOTER ===== -->
-  <footer id="footer">
+  <!-- FOOTER -->
+  <footer>
     <div class="footer-heart">❤️</div>
-    <p class="footer-text">28 Ağustos 2025'ten bu yana, seninle.</p>
-    <p class="footer-sub">Sana özel yapıldı · 5 Ağustos 2026</p>
+    <p>28 Ağustos 2025'ten beri, seninle.</p>
+    <p class="footer-small">5 Ağustos 2026 · Doğum Günün Kutlu Olsun Melis 🌸</p>
   </footer>
 
-  <!-- QR Kütüphanesi -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
