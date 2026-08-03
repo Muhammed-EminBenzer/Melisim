@@ -181,23 +181,68 @@ buildPlaylist();
 load(0, false);
 
 // ===================================================
-// GALERİ
+// GALERİ — STORY CARDS
 // ===================================================
-const grid = document.getElementById("gallery-grid");
-if (grid) {
+
+// Her fotoğrafa romantik yazı eşle
+const quotes = [
+  "Seninle her an çok güzel. ♥",
+  "Güldüğünde dünya duruyor. 🌸",
+  "Bu kare hiç silinmesin. ✨",
+  "En sevdiğim anım. 💛",
+  "Seninle zaman uçuyor. 🌙",
+  "Kültür her geçtiğimde gülümsüzyorum. 🌸",
+  "Benim dünyalar güzeli. ♥",
+  "Bu anı ömrüm boyunca taşıyacağım. 📸",
+  "Seninle olmak her şeyi kolaylaytırıyor. 💫",
+  "28 Ağustos'tan beri hep böyle. ♥",
+  "Yanımda olduğunda her şey yerli yerine oturuyor. 🌟",
+  "En güzel fotoğraflarım seninle. 📸",
+  "Bak bana hiç böyle baktın mı? 😊",
+  "Bu anı üniversiteye anlatırım. 🎉",
+  "Seninle her yer güzel. 🌸",
+  "Fotoğraf makinesi seni sevdiğim gibi sever. ♥",
+  "Bu gülüş... her şey bu gülüşte zaten. ✨",
+  "Kalpte kalan anlardan. 💛",
+  "Hiç bitmeseydi. 🌙",
+  "Seninle yazılan en güzel sayfa. ♥",
+  "Her baktığımda yeniden gülümsüyorum. 🌟",
+  "Bu kadar mutlu olunur muymuş? 🎉",
+  "Anlar bu kadar güzel olabilir. ✨",
+  "Seninle, her zaman. ♥",
+];
+
+const slider = document.getElementById("story-slider");
+if (slider) {
   photos.forEach((ph, idx) => {
     const card = document.createElement("div");
-    card.className = "gallery-card";
+    card.className = "story-card";
     card.innerHTML = `
-      <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
-      <div class="img-placeholder" style="display:none"><span>📷</span>Fotoğraf ${idx+1}</div>
-      <div class="gallery-hover-overlay">🔍</div>
+      <div class="story-bg"></div>
+      <div class="story-inner">
+        <div class="story-photo-frame">
+          <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="img-ph" style="display:none"><span>📷</span>Fotoğraf ${idx+1}</div>
+        </div>
+        <div class="story-text">
+          <p>${quotes[idx % quotes.length]}</p>
+        </div>
+      </div>
     `;
     card.addEventListener("click", () => openLb(idx));
-    grid.appendChild(card);
+    slider.appendChild(card);
   });
 }
+
+// Slider ok tuşları
+const SCROLL_AMT = 300;
+document.getElementById("story-prev")?.addEventListener("click", () => {
+  slider?.scrollBy({ left: -SCROLL_AMT, behavior: "smooth" });
+});
+document.getElementById("story-next")?.addEventListener("click", () => {
+  slider?.scrollBy({ left: SCROLL_AMT, behavior: "smooth" });
+});
 
 // Lightbox
 const lb       = document.getElementById("lightbox");

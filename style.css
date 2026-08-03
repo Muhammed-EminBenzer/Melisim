@@ -288,40 +288,142 @@ section { position: relative; z-index: 1; padding: 6rem 2rem; }
 .pl-dur { font-size: 0.78rem; }
 
 /* =============================================
-   GALERİ
+   GALERİ — STORY CARD SLIDER
 ============================================= */
-#gallery { background: var(--dark2); }
-.gallery-masonry {
-  columns: 4 220px; gap: 1rem;
-  max-width: 1200px; margin: 0 auto;
+#gallery { background: var(--dark2); overflow: hidden; }
+
+.story-slider-wrap {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3.5rem;
 }
-.gallery-card {
-  break-inside: avoid; margin-bottom: 1rem;
-  border-radius: 14px; overflow: hidden;
-  cursor: pointer; position: relative;
-  background: var(--card); border: 1px solid var(--border);
-  transition: transform var(--t), box-shadow var(--t);
-  display: block;
-}
-.gallery-card:hover { transform: scale(1.02) translateY(-4px); box-shadow: 0 12px 40px rgba(255,107,157,0.25); }
-.gallery-card img { width: 100%; height: auto; display: block; }
-.gallery-card .img-placeholder {
-  aspect-ratio: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--dark), #3a1060);
-  color: var(--muted); font-size: 0.8rem; gap: 0.5rem;
-  padding: 1rem; text-align: center;
-}
-.gallery-card .img-placeholder span { font-size: 2rem; }
-.gallery-hover-overlay {
-  position: absolute; inset: 0;
-  background: rgba(255,107,157,0.0);
+
+.story-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: white; font-size: 1.6rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  transition: background var(--t), opacity var(--t);
-  opacity: 0;
+  transition: background var(--t), transform var(--t);
+  backdrop-filter: blur(8px);
 }
-.gallery-card:hover .gallery-hover-overlay { background: rgba(255,107,157,0.15); opacity: 1; }
+.story-nav:hover { background: rgba(255,107,157,0.45); transform: translateY(-50%) scale(1.1); }
+.story-nav-left  { left: 0; }
+.story-nav-right { right: 0; }
+
+.story-slider {
+  display: flex;
+  gap: 1.4rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+.story-slider::-webkit-scrollbar { display: none; }
+
+/* Her kart — referans görsel gibi */
+.story-card {
+  scroll-snap-align: start;
+  flex: 0 0 280px;
+  min-height: 460px;
+  border-radius: 22px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform var(--t), box-shadow var(--t);
+  display: flex; flex-direction: column;
+}
+.story-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+
+/* Arka plan — koyu + kalp efekti */
+.story-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, #1a0015 0%, #2d0022 40%, #0d0010 100%);
+  overflow: hidden;
+}
+.story-bg::before {
+  content: '♥♥♥♥♥♥♥♥♥♥♥♥';
+  position: absolute;
+  top: -10px; left: -10px; right: -10px;
+  font-size: 3rem; line-height: 1.2;
+  color: rgba(180, 0, 40, 0.55);
+  word-break: break-all;
+  filter: blur(2px);
+  pointer-events: none;
+  letter-spacing: 0.2em;
+}
+/* Farklı renk varyasyonları */
+.story-card:nth-child(4n+2) .story-bg {
+  background: linear-gradient(160deg, #0a0d2e 0%, #1a1060 40%, #05070f 100%);
+}
+.story-card:nth-child(4n+2) .story-bg::before { color: rgba(80,60,200,0.45); }
+.story-card:nth-child(4n+3) .story-bg {
+  background: linear-gradient(160deg, #1a0a00 0%, #3d1f00 40%, #0d0500 100%);
+}
+.story-card:nth-child(4n+3) .story-bg::before { color: rgba(200,80,0,0.45); }
+.story-card:nth-child(4n+4) .story-bg {
+  background: linear-gradient(160deg, #0a1a0a 0%, #1a3a1a 40%, #050d05 100%);
+}
+.story-card:nth-child(4n+4) .story-bg::before { color: rgba(0,160,60,0.35); }
+
+/* Yıldız / pırıltılar */
+.story-bg::after {
+  content: '☆ ★ ☆';
+  position: absolute; top: 18px; left: 0; right: 0;
+  text-align: center; font-size: 1rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.5em;
+}
+
+/* Ön yüz içerik */
+.story-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.2rem 1.5rem;
+  height: 100%;
+}
+
+/* Beyaz çerçeveli fotoğraf */
+.story-photo-frame {
+  background: white;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.2);
+  transform: rotate(-1deg);
+  transition: transform var(--t);
+  width: 100%;
+  max-width: 240px;
+}
+.story-card:hover .story-photo-frame { transform: rotate(0deg) scale(1.02); }
+.story-photo-frame img {
+  width: 100%; height: 200px;
+  object-fit: cover; display: block;
+  border-radius: 2px;
+}
+.story-photo-frame .img-ph {
+  width: 100%; height: 200px;
+  background: #f0e8f0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #999; font-size: 0.78rem; text-align: center; gap: 0.4rem;
+  border-radius: 2px;
+}
+.story-photo-frame .img-ph span { font-size: 2rem; }
+
+/* Alttaki yazı */
+.story-text {
+  margin-top: 1.4rem; text-align: center;
+  flex: 1;
+}
+.story-text p {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.05rem; line-height: 1.7;
+  color: rgba(255,255,255,0.88);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
 
 /* Lightbox */
 .lightbox { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; }
