@@ -223,7 +223,6 @@ const quotes = [
 
 const slider = document.getElementById("story-slider");
 if (slider) {
-  const moons = ["🌙","⭐","🌟","✨","💫","🌠"];
   photos.forEach((ph, idx) => {
     const card = document.createElement("div");
     card.className = "story-card";
@@ -231,7 +230,6 @@ if (slider) {
       <div class="story-bg">
         <div class="story-stars"></div>
       </div>
-      <div class="story-moon">${moons[idx % moons.length]}</div>
       <div class="story-inner">
         <div class="story-photo-frame">
           <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"
@@ -285,35 +283,221 @@ document.addEventListener("keydown", e => {
 });
 
 // ===================================================
-// QR KOD — Otomatik Oluştur
+// İNTERAKTİF YILDIZ ALANI (Canvas + Mouse)
 // ===================================================
-const QR_URL = "https://muhammed-eminbenzer.github.io/Melisim/";
-const qrWrap = document.getElementById("qr-canvas-wrap");
+(function() {
+  const canvas = document.createElement("canvas");
+  canvas.id = "starfield";
+  canvas.style.cssText = "position:fixed;inset:0;z-index:0;pointer-events:none;";
+  document.body.prepend(canvas);
 
-if (qrWrap && typeof QRCode !== "undefined") {
-  QRCode.toCanvas(
-    document.createElement("canvas"),
-    QR_URL,
-    { width: 240, margin: 2, color: { dark: "#1a0a2e", light: "#ffffff" }, errorCorrectionLevel: "H" },
-    (err, canvas) => {
-      if (!err) qrWrap.appendChild(canvas);
-    }
-  );
-}
+  const ctx = canvas.getContext("2d");
+  let W, H;
+  let mouseX = 0.5, mouseY = 0.5; // normalized 0-1
+  let mouseSpeed = 0; // 0 = idle
+  let prevMX = 0, prevMY = 0;
 
-// PNG İndir
-document.getElementById("qr-dl-btn")?.addEventListener("click", () => {
-  if (typeof QRCode === "undefined") return;
-  const tmp = document.createElement("canvas");
-  QRCode.toCanvas(
-    tmp, QR_URL,
-    { width: 800, margin: 3, color: { dark: "#1a0a2e", light: "#ffffff" }, errorCorrectionLevel: "H" },
-    (err, canvas) => {
-      if (err) return;
-      const link = document.createElement("a");
-      link.download = "melis-qr-kod.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  // Mouse takip
+  document.addEventListener("mousemove", (e) => {
+    const nx = e.clientX / W;
+    const ny = e.clientY / H;
+    const dx = nx - prevMX;
+    const dy = ny - prevMY;
+    mouseSpeed = Math.min(Math.sqrt(dx*dx + dy*dy) * 30, 1);
+    mouseX = nx;
+    mouseY = ny;
+    prevMX = nx;
+    prevMY = ny;
+  });
+
+  // Touch destegi
+  document.addEventListener("touchmove", (e) => {
+    if (!e.touches[0]) return;
+    const nx = e.touches[0].clientX / W;
+    const ny = e.touches[0].clientY / H;
+    const dx = nx - prevMX;
+    const dy = ny - prevMY;
+    mouseSpeed = Math.min(Math.sqrt(dx*dx + dy*dy) * 30, 1);
+    mouseX = nx;
+    mouseY = ny;
+    prevMX = nx;
+    prevMY = ny;
+  });
+
+  // Yıldızlar olustur
+  const STAR_COUNT = 350;
+  const stars = [];
+  for (let i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * 2 - 0.5,   // -0.5 to 1.5 (parallax icin genis)
+      y: Math.random() * 2 - 0.5,
+      z: Math.random(),              // depth: 0=uzak, 1=yakin
+      size: 0.4 + Math.random() * 1.8,
+      baseAlpha: 0.3 + Math.random() * 0.7,
+      twinkleSpeed: 1 + Math.random() * 3,
+      twinkleOffset: Math.random() * Math.PI * 2,
+      hue: Math.random() > 0.7 ? (200 + Math.random() * 60) : (40 + Math.random() * 20), // mavi veya sari
+      sat: 10 + Math.random() * 40,
+    });
+  }
+
+  let time = 0;
+  let smoothSpeed = 0;
+
+  function render() {
+    time += 0.016;
+    // Speed azalt
+    smoothSpeed += (mouseSpeed - smoothSpeed) * 0.08;
+    mouseSpeed *= 0.95;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Parallax offset (mouse pozisyonuna göre)
+    const offsetX = (mouseX - 0.5) * 2; // -1 to 1
+    const offsetY = (mouseY - 0.5) * 2;
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const s = stars[i];
+
+      // Parallax: yakn yldz daha cok hareket eder
+      const parallaxFactor = 0.3 + s.z * 0.7;
+      const px = (s.x - offsetX * parallaxFactor * 0.08) * W;
+      const py = (s.y - offsetY * parallaxFactor * 0.08) * H;
+
+      // Ekran dısındaysa atla
+      if (px < -20 || px > W+20 || py < -20 || py > H+20) continue;
+
+      // Twinkle + mouse speed etkisi
+      const twinkle = Math.sin(time * s.twinkleSpeed + s.twinkleOffset);
+      const speedBoost = 1 + smoothSpeed * 3 * s.z;
+      const alpha = s.baseAlpha * (0.5 + twinkle * 0.5) * speedBoost;
+      const size = s.size * (1 + smoothSpeed * 1.5 * s.z);
+
+      // Renk
+      ctx.beginPath();
+      ctx.arc(px, py, Math.max(size * 0.5, 0.3), 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 90%, ${Math.min(alpha, 1)})`;
+      ctx.fill();
+
+      // Glow (yakn yldz icin)
+      if (s.z > 0.6 && alpha > 0.5) {
+        ctx.beginPath();
+        ctx.arc(px, py, size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 85%, ${alpha * 0.08})`;
+        ctx.fill();
+      }
     }
-  );
-});
+
+    // Meteor çizimi (canvas üzerinde)
+    if (Math.random() < 0.003 + smoothSpeed * 0.01) {
+      drawMeteor();
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  // Meteor efekti
+  const meteors = [];
+  function drawMeteor() {
+    meteors.push({
+      x: W * (0.3 + Math.random() * 0.7),
+      y: Math.random() * H * 0.4,
+      vx: -(4 + Math.random() * 6 + smoothSpeed * 8),
+      vy: 3 + Math.random() * 4 + smoothSpeed * 6,
+      life: 1,
+      len: 40 + Math.random() * 80,
+    });
+  }
+
+  // Override render to include meteors
+  const _origRender = render;
+  function renderWithMeteors() {
+    time += 0.016;
+    smoothSpeed += (mouseSpeed - smoothSpeed) * 0.08;
+    mouseSpeed *= 0.95;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const offsetX = (mouseX - 0.5) * 2;
+    const offsetY = (mouseY - 0.5) * 2;
+
+    // Yıldızlar
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const s = stars[i];
+      const parallaxFactor = 0.3 + s.z * 0.7;
+      const px = (s.x - offsetX * parallaxFactor * 0.08) * W;
+      const py = (s.y - offsetY * parallaxFactor * 0.08) * H;
+      if (px < -20 || px > W+20 || py < -20 || py > H+20) continue;
+
+      const twinkle = Math.sin(time * s.twinkleSpeed + s.twinkleOffset);
+      const speedBoost = 1 + smoothSpeed * 3 * s.z;
+      const alpha = s.baseAlpha * (0.5 + twinkle * 0.5) * speedBoost;
+      const size = s.size * (1 + smoothSpeed * 1.5 * s.z);
+
+      ctx.beginPath();
+      ctx.arc(px, py, Math.max(size * 0.5, 0.3), 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 90%, ${Math.min(alpha, 1)})`;
+      ctx.fill();
+
+      if (s.z > 0.6 && alpha > 0.5) {
+        ctx.beginPath();
+        ctx.arc(px, py, size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 85%, ${alpha * 0.08})`;
+        ctx.fill();
+      }
+    }
+
+    // Meteorlar
+    if (Math.random() < 0.004 + smoothSpeed * 0.02) {
+      meteors.push({
+        x: W * (0.3 + Math.random() * 0.7),
+        y: Math.random() * H * 0.4,
+        vx: -(5 + Math.random() * 6 + smoothSpeed * 10),
+        vy: 3 + Math.random() * 4 + smoothSpeed * 7,
+        life: 1,
+        len: 40 + Math.random() * 100,
+      });
+    }
+
+    for (let i = meteors.length - 1; i >= 0; i--) {
+      const m = meteors[i];
+      m.x += m.vx;
+      m.y += m.vy;
+      m.life -= 0.015;
+      if (m.life <= 0) { meteors.splice(i, 1); continue; }
+
+      const angle = Math.atan2(m.vy, m.vx);
+      const tailX = m.x - Math.cos(angle) * m.len;
+      const tailY = m.y - Math.sin(angle) * m.len;
+
+      const grad = ctx.createLinearGradient(tailX, tailY, m.x, m.y);
+      grad.addColorStop(0, `rgba(255,255,255,0)`);
+      grad.addColorStop(0.7, `rgba(200,220,255,${m.life * 0.6})`);
+      grad.addColorStop(1, `rgba(255,255,255,${m.life * 0.9})`);
+
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(m.x, m.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Parlak uç
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${m.life * 0.8})`;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(renderWithMeteors);
+  }
+
+  requestAnimationFrame(renderWithMeteors);
+})();
