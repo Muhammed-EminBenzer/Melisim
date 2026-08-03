@@ -218,7 +218,11 @@ if (slider) {
     const card = document.createElement("div");
     card.className = "story-card";
     card.innerHTML = `
-      <div class="story-bg"></div>
+      <div class="story-bg">
+        <div class="story-aurora"></div>
+        <div class="story-stars"></div>
+        <div class="story-orb3"></div>
+      </div>
       <div class="story-inner">
         <div class="story-photo-frame">
           <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"

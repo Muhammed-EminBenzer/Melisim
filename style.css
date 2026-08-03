@@ -337,44 +337,115 @@ section { position: relative; z-index: 1; padding: 6rem 2rem; }
 }
 .story-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
 
-/* Arka plan — koyu + kalp efekti */
+/* Arka plan — aurora / cam efekti */
 .story-bg {
   position: absolute; inset: 0;
-  background: linear-gradient(160deg, #1a0015 0%, #2d0022 40%, #0d0010 100%);
   overflow: hidden;
 }
-.story-bg::before {
-  content: '♥♥♥♥♥♥♥♥♥♥♥♥';
-  position: absolute;
-  top: -10px; left: -10px; right: -10px;
-  font-size: 3rem; line-height: 1.2;
-  color: rgba(180, 0, 40, 0.55);
-  word-break: break-all;
-  filter: blur(2px);
-  pointer-events: none;
-  letter-spacing: 0.2em;
-}
-/* Farklı renk varyasyonları */
-.story-card:nth-child(4n+2) .story-bg {
-  background: linear-gradient(160deg, #0a0d2e 0%, #1a1060 40%, #05070f 100%);
-}
-.story-card:nth-child(4n+2) .story-bg::before { color: rgba(80,60,200,0.45); }
-.story-card:nth-child(4n+3) .story-bg {
-  background: linear-gradient(160deg, #1a0a00 0%, #3d1f00 40%, #0d0500 100%);
-}
-.story-card:nth-child(4n+3) .story-bg::before { color: rgba(200,80,0,0.45); }
-.story-card:nth-child(4n+4) .story-bg {
-  background: linear-gradient(160deg, #0a1a0a 0%, #1a3a1a 40%, #050d05 100%);
-}
-.story-card:nth-child(4n+4) .story-bg::before { color: rgba(0,160,60,0.35); }
 
-/* Yıldız / pırıltılar */
+/* Her kart farklı aurora renkleri */
+.story-card:nth-child(4n+1) .story-bg {
+  background: linear-gradient(145deg, #0f0524 0%, #1a0535 50%, #0a0218 100%);
+}
+.story-card:nth-child(4n+2) .story-bg {
+  background: linear-gradient(145deg, #020b1a 0%, #051832 50%, #010810 100%);
+}
+.story-card:nth-child(4n+3) .story-bg {
+  background: linear-gradient(145deg, #150a02 0%, #2a1505 50%, #0a0501 100%);
+}
+.story-card:nth-child(4n+4) .story-bg {
+  background: linear-gradient(145deg, #050f14 0%, #0a2030 50%, #020810 100%);
+}
+
+/* Bokeh dairesel ışıklar — pseudo ile */
+.story-bg::before {
+  content: '';
+  position: absolute;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  filter: blur(45px);
+  top: -30px; left: -30px;
+  animation: orb-drift 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
 .story-bg::after {
-  content: '☆ ★ ☆';
-  position: absolute; top: 18px; left: 0; right: 0;
-  text-align: center; font-size: 1rem;
-  color: rgba(255,255,255,0.5);
-  letter-spacing: 0.5em;
+  content: '';
+  position: absolute;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  filter: blur(35px);
+  bottom: 40px; right: -20px;
+  animation: orb-drift2 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Renk varyasyonları */
+.story-card:nth-child(4n+1) .story-bg::before { background: rgba(220, 60, 120, 0.55); }
+.story-card:nth-child(4n+1) .story-bg::after  { background: rgba(160, 40, 200, 0.4); }
+
+.story-card:nth-child(4n+2) .story-bg::before { background: rgba(60, 80, 255, 0.5); }
+.story-card:nth-child(4n+2) .story-bg::after  { background: rgba(100, 200, 255, 0.35); }
+
+.story-card:nth-child(4n+3) .story-bg::before { background: rgba(255, 120, 40, 0.5); }
+.story-card:nth-child(4n+3) .story-bg::after  { background: rgba(240, 60, 100, 0.4); }
+
+.story-card:nth-child(4n+4) .story-bg::before { background: rgba(40, 180, 200, 0.45); }
+.story-card:nth-child(4n+4) .story-bg::after  { background: rgba(80, 100, 255, 0.4); }
+
+@keyframes orb-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, 40px) scale(1.2); }
+}
+@keyframes orb-drift2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-25px, -35px) scale(1.15); }
+}
+
+/* Ek üçüncü bokeh noktası (JS ile eklendi) */
+.story-orb3 {
+  position: absolute;
+  width: 100px; height: 100px; border-radius: 50%;
+  filter: blur(30px); pointer-events: none;
+  top: 55%; left: 30%;
+  animation: orb-drift3 8s ease-in-out infinite alternate;
+}
+@keyframes orb-drift3 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(20px, -25px) scale(1.3); }
+}
+.story-card:nth-child(4n+1) .story-orb3 { background: rgba(255, 200, 80, 0.3); }
+.story-card:nth-child(4n+2) .story-orb3 { background: rgba(180, 80, 255, 0.3); }
+.story-card:nth-child(4n+3) .story-orb3 { background: rgba(255, 230, 80, 0.3); }
+.story-card:nth-child(4n+4) .story-orb3 { background: rgba(80, 220, 160, 0.3); }
+
+/* İnce aurora şeridi — üst */
+.story-aurora {
+  position: absolute;
+  top: 0; left: -20%; right: -20%;
+  height: 160px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+  filter: blur(20px);
+  border-radius: 0 0 80% 80%;
+  animation: aurora-wave 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes aurora-wave {
+  0%   { transform: scaleX(1) translateY(0); opacity: 0.6; }
+  100% { transform: scaleX(1.1) translateY(-15px); opacity: 1; }
+}
+
+/* Yıldız partikcikler — minik noktalar */
+.story-stars {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 8%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 50%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 45%, rgba(255,255,255,0.5) 0%, transparent 100%);
 }
 
 /* Ön yüz içerik */
