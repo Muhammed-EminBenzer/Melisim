@@ -5,71 +5,124 @@
 
 // ===== ŞARKILAR =====
 const songs = [
-  { title: "Şarkı 1", sub: "Senin için 🎸", src: "songs/sarki1.mp3", dur: "--:--" },
-  { title: "Şarkı 2", sub: "Senin için 🎸", src: "songs/sarki2.mp3", dur: "--:--" },
+  { title: "Şarkı 1", sub: "Senin için", src: "songs/sarki1.mp3", dur: "--:--" },
+  { title: "Şarkı 2", sub: "Senin için", src: "songs/sarki2.mp3", dur: "--:--" },
 ];
 
-// ===== FOTOĞRAFLAR (24 adet, karışık) =====
+// ===== FOTOĞRAFLAR (24 adet) =====
 const photos = [];
-// foto1.jpeg ~ foto24.jpeg — karışık sıraya koy
 const photoOrder = [7,13,3,19,1,22,10,5,16,2,14,8,20,4,17,11,23,6,15,9,21,12,18,24];
-photoOrder.forEach((n, i) => {
+photoOrder.forEach((n) => {
   photos.push({ src: `photos/foto${n}.jpeg`, cap: "" });
 });
 
 // ===================================================
-// METEOR
+// GERÇEK 3D UZAY & MOUSE HAREKETİ (CANVAS 3D STARFIELD)
 // ===================================================
-function spawnMeteor() {
-  let c = document.getElementById("meteor-container");
-  if (!c) {
-    c = document.createElement("div");
-    c.id = "meteor-container";
-    document.body.appendChild(c);
-  }
-  const m = document.createElement("div");
-  m.className = "meteor";
-  const w = 80 + Math.random() * 200;
-  m.style.width = w + "px";
-  m.style.top  = (Math.random() * 60) + "%";
-  m.style.left = (30 + Math.random() * 70) + "%";
-  const dur = 1.5 + Math.random() * 3;
-  m.style.animationDuration = dur + "s";
-  m.style.animationDelay   = Math.random() * 2 + "s";
-  m.style.opacity = 0;
-  c.appendChild(m);
-  setTimeout(() => m.remove(), (dur + 2.5) * 1000);
-}
-for (let i = 0; i < 3; i++) setTimeout(spawnMeteor, i * 1500);
-setInterval(spawnMeteor, 3000);
+(function init3DSpace() {
+  const canvas = document.getElementById("starfield");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
 
-// ===================================================
-// HERO NEBULA ORBLARI
-// ===================================================
-function spawnOrbs() {
-  const c = document.getElementById("bubbles-container");
-  if (!c) return;
-  const configs = [
-    { w:300, h:300, l:"5%",  t:"20%", bg:"rgba(100,50,220,0.18)", dur:8  },
-    { w:250, h:250, l:"60%", t:"10%", bg:"rgba(200,80,160,0.14)", dur:10 },
-    { w:350, h:300, l:"30%", t:"55%", bg:"rgba(60,80,200,0.12)",  dur:7  },
-    { w:200, h:200, l:"80%", t:"60%", bg:"rgba(120,40,180,0.15)", dur:9  },
-  ];
-  configs.forEach((cfg, i) => {
-    const b = document.createElement("div");
-    b.className = "space-orb";
-    b.style.width  = cfg.w + "px";
-    b.style.height = cfg.h + "px";
-    b.style.left   = cfg.l;
-    b.style.top    = cfg.t;
-    b.style.background = `radial-gradient(circle, ${cfg.bg} 0%, transparent 70%)`;
-    b.style.filter = "blur(60px)";
-    b.style.animationDuration = cfg.dur + "s";
-    b.style.animationDelay = (i * 1.5) + "s";
-    c.appendChild(b);
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  window.addEventListener("resize", () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   });
-}
-spawnOrbs();
+
+  const numStars = 800;
+  const stars = [];
+  const fov = 300; // 3D alan derinliği (Field of view)
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetMouseX = 0;
+  let targetMouseY = 0;
+  let baseSpeed = 2;
+  let currentSpeed = baseSpeed;
+
+  // 3D Yıldız Nesneleri
+  for (let i = 0; i < numStars; i++) {
+    stars.push({
+      x: (Math.random() - 0.5) * width * 2,
+      y: (Math.random() - 0.5) * height * 2,
+      z: Math.random() * fov,
+      size: Math.random() * 1.5 + 0.5,
+      color: Math.random() > 0.3 ? "#ffffff" : (Math.random() > 0.5 ? "#b8a9d9" : "#f0c060")
+    });
+  }
+
+  // Mouse Hareketi & Hızlanma Hesabı
+  let lastMouseTime = Date.now();
+  document.addEventListener("mousemove", (e) => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    targetMouseX = (e.clientX - cx) * 0.002;
+    targetMouseY = (e.clientY - cy) * 0.002;
+
+    // Fare hareket ettikçe uzayda hızlanma etkisi
+    currentSpeed = baseSpeed + 4;
+    lastMouseTime = Date.now();
+  });
+
+  function updateAndDraw() {
+    // Fare durduğunda hızı normale düşür
+    if (Date.now() - lastMouseTime > 100) {
+      currentSpeed += (baseSpeed - currentSpeed) * 0.05;
+    }
+
+    // Yumuşak yön değişimi
+    mouseX += (targetMouseX - mouseX) * 0.05;
+    mouseY += (targetMouseY - mouseY) * 0.05;
+
+    ctx.fillStyle = "rgba(2, 0, 8, 0.4)"; // İz bırakarak uçuş efekti
+    ctx.fillRect(0, 0, width, height);
+
+    const cx = width / 2;
+    const cy = height / 2;
+
+    for (let i = 0; i < numStars; i++) {
+      const star = stars[i];
+
+      // Z ekseninde ileri uçuş (bize doğru geliyor)
+      star.z -= currentSpeed;
+
+      // Mouse yönüne göre uzayda kayma (3D Dönme/Açı)
+      star.x -= mouseX * star.z * 0.1;
+      star.y -= mouseY * star.z * 0.1;
+
+      // Ekrandan çıkınca arkaya (derinliğe) tekrar gönder
+      if (star.z <= 0) {
+        star.z = fov;
+        star.x = (Math.random() - 0.5) * width * 2;
+        star.y = (Math.random() - 0.5) * height * 2;
+      }
+
+      // 3D Perspektif İzdüşümü (Perspective Projection)
+      const k = fov / star.z;
+      const px = star.x * k + cx;
+      const py = star.y * k + cy;
+
+      if (px >= 0 && px <= width && py >= 0 && py <= height) {
+        const size = Math.max(0.1, (1 - star.z / fov) * star.size * 2.5);
+        const alpha = Math.min(1, (1 - star.z / fov) * 1.2);
+
+        ctx.beginPath();
+        ctx.arc(px, py, size, 0, Math.PI * 2);
+        ctx.fillStyle = star.color;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    requestAnimationFrame(updateAndDraw);
+  }
+
+  updateAndDraw();
+})();
 
 // ===================================================
 // SAYAÇ — 28 Ağustos 2025
@@ -92,7 +145,7 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 // ===================================================
-// NAVBAR
+// NAVBAR & HAMBURGER
 // ===================================================
 const navbar = document.getElementById("navbar");
 window.addEventListener("scroll", () => navbar?.classList.toggle("scrolled", scrollY > 50));
@@ -158,7 +211,7 @@ function load(idx, autoPlay = false) {
 
 function setPlay(v) {
   playing = v;
-  if (playBtn) playBtn.textContent = v ? "⏸" : "▶";
+  if (playBtn) playBtn.textContent = v ? "pause" : "play";
   disc?.classList.toggle("spinning", v);
 }
 
@@ -190,35 +243,33 @@ buildPlaylist();
 load(0, false);
 
 // ===================================================
-// GALERİ — STORY CARDS
+// GALERİ — STORY SLIDER
 // ===================================================
-
-// Her fotoğrafa romantik yazı eşle
 const quotes = [
-  "Seninle her an çok güzel. ♥",
-  "Güldüğünde dünya duruyor. 🌸",
-  "Bu kare hiç silinmesin. ✨",
-  "En sevdiğim anım. 💛",
-  "Seninle zaman uçuyor. 🌙",
-  "Kültür her geçtiğimde gülümsüzyorum. 🌸",
-  "Benim dünyalar güzeli. ♥",
-  "Bu anı ömrüm boyunca taşıyacağım. 📸",
-  "Seninle olmak her şeyi kolaylaytırıyor. 💫",
-  "28 Ağustos'tan beri hep böyle. ♥",
-  "Yanımda olduğunda her şey yerli yerine oturuyor. 🌟",
-  "En güzel fotoğraflarım seninle. 📸",
-  "Bak bana hiç böyle baktın mı? 😊",
-  "Bu anı üniversiteye anlatırım. 🎉",
-  "Seninle her yer güzel. 🌸",
-  "Fotoğraf makinesi seni sevdiğim gibi sever. ♥",
-  "Bu gülüş... her şey bu gülüşte zaten. ✨",
-  "Kalpte kalan anlardan. 💛",
-  "Hiç bitmeseydi. 🌙",
-  "Seninle yazılan en güzel sayfa. ♥",
-  "Her baktığımda yeniden gülümsüyorum. 🌟",
-  "Bu kadar mutlu olunur muymuş? 🎉",
-  "Anlar bu kadar güzel olabilir. ✨",
-  "Seninle, her zaman. ♥",
+  "Seninle her an çok güzel.",
+  "Güldüğünde dünya duruyor.",
+  "Bu kare hiç silinmesin.",
+  "En sevdiğim anım.",
+  "Seninle zaman uçuyor.",
+  "Kültürden her geçtiğimde gülümsüyorum.",
+  "Benim dünyalar güzeli sevgilim.",
+  "Bu anı ömrüm boyunca taşıyacağım.",
+  "Seninle olmak her şeyi kolaylaştırıyor.",
+  "28 Ağustos'tan beri hep böyle.",
+  "Yanımda olduğunda her şey yerli yerine oturuyor.",
+  "En güzel fotoğraflarım seninle.",
+  "Bak bana hiç böyle baktın mı?",
+  "Bu anı üniversiteye anlatırım.",
+  "Seninle her yer güzel.",
+  "Fotoğraf makinesi seni sevdiğim gibi sever.",
+  "Bu gülüş... her şey bu gülüşte zaten.",
+  "Kalpte kalan anlardan.",
+  "Hiç bitmeseydi.",
+  "Seninle yazılan en güzel sayfa.",
+  "Her baktığımda yeniden gülümsüyorum.",
+  "Bu kadar mutlu olunur muymuş?",
+  "Anlar bu kadar güzel olabilir.",
+  "Seninle, her zaman."
 ];
 
 const slider = document.getElementById("story-slider");
@@ -227,14 +278,11 @@ if (slider) {
     const card = document.createElement("div");
     card.className = "story-card";
     card.innerHTML = `
-      <div class="story-bg">
-        <div class="story-stars"></div>
-      </div>
       <div class="story-inner">
         <div class="story-photo-frame">
           <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-          <div class="img-ph" style="display:none"><span>📷</span>Fotoğraf ${idx+1}</div>
+          <div class="img-ph" style="display:none">Fotoğraf ${idx+1}</div>
         </div>
         <div class="story-text">
           <p>${quotes[idx % quotes.length]}</p>
@@ -246,7 +294,7 @@ if (slider) {
   });
 }
 
-// Slider ok tuşları
+// Slider okları
 const SCROLL_AMT = 300;
 document.getElementById("story-prev")?.addEventListener("click", () => {
   slider?.scrollBy({ left: -SCROLL_AMT, behavior: "smooth" });
@@ -281,223 +329,3 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowLeft")  document.getElementById("lb-prev")?.click();
   if (e.key === "ArrowRight") document.getElementById("lb-next")?.click();
 });
-
-// ===================================================
-// İNTERAKTİF YILDIZ ALANI (Canvas + Mouse)
-// ===================================================
-(function() {
-  const canvas = document.createElement("canvas");
-  canvas.id = "starfield";
-  canvas.style.cssText = "position:fixed;inset:0;z-index:0;pointer-events:none;";
-  document.body.prepend(canvas);
-
-  const ctx = canvas.getContext("2d");
-  let W, H;
-  let mouseX = 0.5, mouseY = 0.5; // normalized 0-1
-  let mouseSpeed = 0; // 0 = idle
-  let prevMX = 0, prevMY = 0;
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  // Mouse takip
-  document.addEventListener("mousemove", (e) => {
-    const nx = e.clientX / W;
-    const ny = e.clientY / H;
-    const dx = nx - prevMX;
-    const dy = ny - prevMY;
-    mouseSpeed = Math.min(Math.sqrt(dx*dx + dy*dy) * 30, 1);
-    mouseX = nx;
-    mouseY = ny;
-    prevMX = nx;
-    prevMY = ny;
-  });
-
-  // Touch destegi
-  document.addEventListener("touchmove", (e) => {
-    if (!e.touches[0]) return;
-    const nx = e.touches[0].clientX / W;
-    const ny = e.touches[0].clientY / H;
-    const dx = nx - prevMX;
-    const dy = ny - prevMY;
-    mouseSpeed = Math.min(Math.sqrt(dx*dx + dy*dy) * 30, 1);
-    mouseX = nx;
-    mouseY = ny;
-    prevMX = nx;
-    prevMY = ny;
-  });
-
-  // Yıldızlar olustur
-  const STAR_COUNT = 350;
-  const stars = [];
-  for (let i = 0; i < STAR_COUNT; i++) {
-    stars.push({
-      x: Math.random() * 2 - 0.5,   // -0.5 to 1.5 (parallax icin genis)
-      y: Math.random() * 2 - 0.5,
-      z: Math.random(),              // depth: 0=uzak, 1=yakin
-      size: 0.4 + Math.random() * 1.8,
-      baseAlpha: 0.3 + Math.random() * 0.7,
-      twinkleSpeed: 1 + Math.random() * 3,
-      twinkleOffset: Math.random() * Math.PI * 2,
-      hue: Math.random() > 0.7 ? (200 + Math.random() * 60) : (40 + Math.random() * 20), // mavi veya sari
-      sat: 10 + Math.random() * 40,
-    });
-  }
-
-  let time = 0;
-  let smoothSpeed = 0;
-
-  function render() {
-    time += 0.016;
-    // Speed azalt
-    smoothSpeed += (mouseSpeed - smoothSpeed) * 0.08;
-    mouseSpeed *= 0.95;
-
-    ctx.clearRect(0, 0, W, H);
-
-    // Parallax offset (mouse pozisyonuna göre)
-    const offsetX = (mouseX - 0.5) * 2; // -1 to 1
-    const offsetY = (mouseY - 0.5) * 2;
-
-    for (let i = 0; i < STAR_COUNT; i++) {
-      const s = stars[i];
-
-      // Parallax: yakn yldz daha cok hareket eder
-      const parallaxFactor = 0.3 + s.z * 0.7;
-      const px = (s.x - offsetX * parallaxFactor * 0.08) * W;
-      const py = (s.y - offsetY * parallaxFactor * 0.08) * H;
-
-      // Ekran dısındaysa atla
-      if (px < -20 || px > W+20 || py < -20 || py > H+20) continue;
-
-      // Twinkle + mouse speed etkisi
-      const twinkle = Math.sin(time * s.twinkleSpeed + s.twinkleOffset);
-      const speedBoost = 1 + smoothSpeed * 3 * s.z;
-      const alpha = s.baseAlpha * (0.5 + twinkle * 0.5) * speedBoost;
-      const size = s.size * (1 + smoothSpeed * 1.5 * s.z);
-
-      // Renk
-      ctx.beginPath();
-      ctx.arc(px, py, Math.max(size * 0.5, 0.3), 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 90%, ${Math.min(alpha, 1)})`;
-      ctx.fill();
-
-      // Glow (yakn yldz icin)
-      if (s.z > 0.6 && alpha > 0.5) {
-        ctx.beginPath();
-        ctx.arc(px, py, size * 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 85%, ${alpha * 0.08})`;
-        ctx.fill();
-      }
-    }
-
-    // Meteor çizimi (canvas üzerinde)
-    if (Math.random() < 0.003 + smoothSpeed * 0.01) {
-      drawMeteor();
-    }
-
-    requestAnimationFrame(render);
-  }
-
-  // Meteor efekti
-  const meteors = [];
-  function drawMeteor() {
-    meteors.push({
-      x: W * (0.3 + Math.random() * 0.7),
-      y: Math.random() * H * 0.4,
-      vx: -(4 + Math.random() * 6 + smoothSpeed * 8),
-      vy: 3 + Math.random() * 4 + smoothSpeed * 6,
-      life: 1,
-      len: 40 + Math.random() * 80,
-    });
-  }
-
-  // Override render to include meteors
-  const _origRender = render;
-  function renderWithMeteors() {
-    time += 0.016;
-    smoothSpeed += (mouseSpeed - smoothSpeed) * 0.08;
-    mouseSpeed *= 0.95;
-
-    ctx.clearRect(0, 0, W, H);
-
-    const offsetX = (mouseX - 0.5) * 2;
-    const offsetY = (mouseY - 0.5) * 2;
-
-    // Yıldızlar
-    for (let i = 0; i < STAR_COUNT; i++) {
-      const s = stars[i];
-      const parallaxFactor = 0.3 + s.z * 0.7;
-      const px = (s.x - offsetX * parallaxFactor * 0.08) * W;
-      const py = (s.y - offsetY * parallaxFactor * 0.08) * H;
-      if (px < -20 || px > W+20 || py < -20 || py > H+20) continue;
-
-      const twinkle = Math.sin(time * s.twinkleSpeed + s.twinkleOffset);
-      const speedBoost = 1 + smoothSpeed * 3 * s.z;
-      const alpha = s.baseAlpha * (0.5 + twinkle * 0.5) * speedBoost;
-      const size = s.size * (1 + smoothSpeed * 1.5 * s.z);
-
-      ctx.beginPath();
-      ctx.arc(px, py, Math.max(size * 0.5, 0.3), 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 90%, ${Math.min(alpha, 1)})`;
-      ctx.fill();
-
-      if (s.z > 0.6 && alpha > 0.5) {
-        ctx.beginPath();
-        ctx.arc(px, py, size * 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, 85%, ${alpha * 0.08})`;
-        ctx.fill();
-      }
-    }
-
-    // Meteorlar
-    if (Math.random() < 0.004 + smoothSpeed * 0.02) {
-      meteors.push({
-        x: W * (0.3 + Math.random() * 0.7),
-        y: Math.random() * H * 0.4,
-        vx: -(5 + Math.random() * 6 + smoothSpeed * 10),
-        vy: 3 + Math.random() * 4 + smoothSpeed * 7,
-        life: 1,
-        len: 40 + Math.random() * 100,
-      });
-    }
-
-    for (let i = meteors.length - 1; i >= 0; i--) {
-      const m = meteors[i];
-      m.x += m.vx;
-      m.y += m.vy;
-      m.life -= 0.015;
-      if (m.life <= 0) { meteors.splice(i, 1); continue; }
-
-      const angle = Math.atan2(m.vy, m.vx);
-      const tailX = m.x - Math.cos(angle) * m.len;
-      const tailY = m.y - Math.sin(angle) * m.len;
-
-      const grad = ctx.createLinearGradient(tailX, tailY, m.x, m.y);
-      grad.addColorStop(0, `rgba(255,255,255,0)`);
-      grad.addColorStop(0.7, `rgba(200,220,255,${m.life * 0.6})`);
-      grad.addColorStop(1, `rgba(255,255,255,${m.life * 0.9})`);
-
-      ctx.beginPath();
-      ctx.moveTo(tailX, tailY);
-      ctx.lineTo(m.x, m.y);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Parlak uç
-      ctx.beginPath();
-      ctx.arc(m.x, m.y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${m.life * 0.8})`;
-      ctx.fill();
-    }
-
-    requestAnimationFrame(renderWithMeteors);
-  }
-
-  requestAnimationFrame(renderWithMeteors);
-})();
