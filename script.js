@@ -18,49 +18,58 @@ photoOrder.forEach((n, i) => {
 });
 
 // ===================================================
-// KONFET İ
+// METEOR
 // ===================================================
-const COLORS = ["#ff6b9d","#ffd166","#c77dff","#ff9a5c","#06d6a0","#ff8fb1"];
-function spawnConf() {
-  const c = document.getElementById("confetti-container");
-  if (!c) return;
-  const el = document.createElement("div");
-  el.className = "conf";
-  el.style.left = Math.random() * 100 + "vw";
-  el.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
-  el.style.width  = (6 + Math.random() * 8) + "px";
-  el.style.height = (6 + Math.random() * 8) + "px";
-  el.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
-  const dur = 5 + Math.random() * 8;
-  el.style.animationDuration = dur + "s";
-  el.style.animationDelay = Math.random() * 3 + "s";
-  c.appendChild(el);
-  setTimeout(() => el.remove(), (dur + 3) * 1000);
+function spawnMeteor() {
+  let c = document.getElementById("meteor-container");
+  if (!c) {
+    c = document.createElement("div");
+    c.id = "meteor-container";
+    document.body.appendChild(c);
+  }
+  const m = document.createElement("div");
+  m.className = "meteor";
+  const w = 80 + Math.random() * 200;
+  m.style.width = w + "px";
+  m.style.top  = (Math.random() * 60) + "%";
+  m.style.left = (30 + Math.random() * 70) + "%";
+  const dur = 1.5 + Math.random() * 3;
+  m.style.animationDuration = dur + "s";
+  m.style.animationDelay   = Math.random() * 2 + "s";
+  m.style.opacity = 0;
+  c.appendChild(m);
+  setTimeout(() => m.remove(), (dur + 2.5) * 1000);
 }
-for (let i = 0; i < 6; i++) setTimeout(spawnConf, i * 300);
-setInterval(spawnConf, 800);
+for (let i = 0; i < 3; i++) setTimeout(spawnMeteor, i * 1500);
+setInterval(spawnMeteor, 3000);
 
 // ===================================================
-// HERO BALONCUKLAR
+// HERO NEBULA ORBLARI
 // ===================================================
-function spawnBubbles() {
+function spawnOrbs() {
   const c = document.getElementById("bubbles-container");
   if (!c) return;
-  for (let i = 0; i < 5; i++) {
+  const configs = [
+    { w:300, h:300, l:"5%",  t:"20%", bg:"rgba(100,50,220,0.18)", dur:8  },
+    { w:250, h:250, l:"60%", t:"10%", bg:"rgba(200,80,160,0.14)", dur:10 },
+    { w:350, h:300, l:"30%", t:"55%", bg:"rgba(60,80,200,0.12)",  dur:7  },
+    { w:200, h:200, l:"80%", t:"60%", bg:"rgba(120,40,180,0.15)", dur:9  },
+  ];
+  configs.forEach((cfg, i) => {
     const b = document.createElement("div");
-    b.className = "bubble";
-    const size = 80 + Math.random() * 200;
-    b.style.width  = size + "px";
-    b.style.height = size + "px";
-    b.style.left   = Math.random() * 100 + "%";
-    b.style.top    = Math.random() * 100 + "%";
-    b.style.animationDuration = (4 + Math.random() * 6) + "s";
-    b.style.animationDelay    = Math.random() * 4 + "s";
-    b.style.opacity = 0.3 + Math.random() * 0.3;
+    b.className = "space-orb";
+    b.style.width  = cfg.w + "px";
+    b.style.height = cfg.h + "px";
+    b.style.left   = cfg.l;
+    b.style.top    = cfg.t;
+    b.style.background = `radial-gradient(circle, ${cfg.bg} 0%, transparent 70%)`;
+    b.style.filter = "blur(60px)";
+    b.style.animationDuration = cfg.dur + "s";
+    b.style.animationDelay = (i * 1.5) + "s";
     c.appendChild(b);
-  }
+  });
 }
-spawnBubbles();
+spawnOrbs();
 
 // ===================================================
 // SAYAÇ — 28 Ağustos 2025
@@ -214,15 +223,15 @@ const quotes = [
 
 const slider = document.getElementById("story-slider");
 if (slider) {
+  const moons = ["🌙","⭐","🌟","✨","💫","🌠"];
   photos.forEach((ph, idx) => {
     const card = document.createElement("div");
     card.className = "story-card";
     card.innerHTML = `
       <div class="story-bg">
-        <div class="story-aurora"></div>
         <div class="story-stars"></div>
-        <div class="story-orb3"></div>
       </div>
+      <div class="story-moon">${moons[idx % moons.length]}</div>
       <div class="story-inner">
         <div class="story-photo-frame">
           <img src="${ph.src}" alt="Anı ${idx+1}" loading="lazy"
